@@ -1,7 +1,11 @@
 hello
 i code 
 i play games
+<<<<<<< HEAD
 i love spidey
 github 
 changing file
 changing file 2
+=======
+making changes
+>>>>>>> max
