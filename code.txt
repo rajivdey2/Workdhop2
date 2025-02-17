@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+#define MAX 100  // Maximum number of elements in the linked list
+
+struct Node {
+    int data;  // Stores the data
+    int next;  // Stores the index of the next node (-1 if no next node)
+};
+
+struct Node list[MAX];  // Array-based linked list
+int head = -1;  // Head index of the linked list
+int freeIndex = 0;  // Next free index in the array
+
+// Function to insert an element at the end
+void insert(int value) {
+    if (freeIndex >= MAX) {
+        printf("List is full!\n");
+        return;
+    }
+
+    list[freeIndex].data = value;
+    list[freeIndex].next = -1;
+
+    if (head == -1) {  // If list is empty, make the new node the head
+        head = freeIndex;
+    } else {
+        int temp = head;
+        while (list[temp].next != -1) {
+            temp = list[temp].next;
+        }
+        list[temp].next = freeIndex;
+    }
+    
+    freeIndex++;
+}
+
+// Function to delete an element at a given position (1-based index)
+void deleteAtPosition(int pos) {
+    if (head == -1) {
+        printf("List is empty!\n");
+        return;
+    }
+
+    int temp = head, prev = -1, count = 1;
+
+    while (temp != -1 && count < pos) {
+        prev = temp;
+        temp = list[temp].next;
+        count++;
+    }
+
+    if (temp == -1) {
+        printf("Invalid position!\n");
+        return;
+    }
+
+    if (prev == -1) {  // Deleting the first element
+        head = list[temp].next;
+    } else {
+        list[prev].next = list[temp].next;
+    }
+
+    printf("Deleted element: %d\n", list[temp].data);
+}
+
+// Function to display the linked list
+void display() {
+    if (head == -1) {
+        printf("List is empty!\n");
+        return;
+    }
+
+    int temp = head;
+    printf("Linked List: ");
+    while (temp != -1) {
+        printf("%d -> ", list[temp].data);
+        temp = list[temp].next;
+    }
+    printf("NULL\n");
+}
+
+// Main function
+int main() {
+    insert(10);
+    insert(20);
+    insert(30);
+    insert(40);
+
+    printf("After insertion:\n");
+    display();
+
+    deleteAtPosition(2);  // Deleting the second element
+
+    printf("After deletion:\n");
+    display();
+
+    return 0;
+}
