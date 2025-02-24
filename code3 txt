@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for stack node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to initialize an empty stack
+struct Node* createStack() {
+    return NULL;
+}
+
+// Function to check if the stack is empty
+int isEmpty(struct Node* top) {
+    return top == NULL;
+}
+
+// Function to push an element onto the stack
+void push(struct Node** top, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (!newNode) {
+        printf("Stack overflow!\n");
+        return;
+    }
+    newNode->data = data;
+    newNode->next = *top;
+    *top = newNode;
+    printf("Pushed %d onto the stack.\n", data);
+}
+
+// Function to pop an element from the stack
+int pop(struct Node** top) {
+    if (isEmpty(*top)) {
+        printf("Stack underflow!\n");
+        return -1;
+    }
+    struct Node* temp = *top;
+    int popped = temp->data;
+    *top = temp->next;
+    free(temp);
+    return popped;
+}
+
+// Function to peek at the top element of the stack
+int peek(struct Node* top) {
+    if (isEmpty(top)) {
+        printf("Stack is empty!\n");
+        return -1;
+    }
+    return top->data;
+}
+
+// Function to display the stack
+void display(struct Node* top) {
+    if (isEmpty(top)) {
+        printf("Stack is empty!\n");
+        return;
+    }
+    printf("Stack elements: ");
+    struct Node* temp = top;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Function to reverse the stack
+void reverseStack(struct Node** top) {
+    struct Node *prev = NULL, *current = *top, *next = NULL;
+    while (current) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    *top = prev;
+}
+
+int main() {
+    struct Node* stack = createStack();
+    
+    push(&stack, 10);
+    push(&stack, 20);
+    push(&stack, 30);
+    display(stack);
+    
+    printf("Popped element: %d\n", pop(&stack));
+    display(stack);
+    
+    printf("Top element: %d\n", peek(stack));
+    
+    printf("Reversing the stack...\n");
+    reverseStack(&stack);
+    display(stack);
+    
+    return 0;
+}
