@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 100
+
+int stack[MAX_SIZE];
+int top = -1;
+
+// Function to push an element onto the stack
+void push(int value) {
+    if (top >= MAX_SIZE - 1) {
+        printf("Stack Overflow!\n");
+        return;
+    }
+    stack[++top] = value;
+}
+
+// Function to pop an element from the stack
+int pop() {
+    if (top < 0) {
+        printf("Stack Underflow!\n");
+        return -1;
+    }
+    return stack[top--];
+}
+
+// Function to reverse the array
+void reverseArray(int arr[], int size) {
+    int start = 0;
+    int end = size - 1;
+    while (start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+int main() {
+    int n, value;
+
+    printf("Enter the number of elements to push onto the stack: ");
+    scanf("%d", &n);
+
+    if (n > MAX_SIZE) {
+        printf("Number of elements exceeds stack capacity!\n");
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &value);
+        push(value);
+    }
+
+    printf("Stack elements: ");
+    for (int i = 0; i <= top; i++) {
+        printf("%d ", stack[i]);
+    }
+    printf("\n");
+
+    // Reverse the stack array
+    reverseArray(stack, top + 1);
+
+    printf("Reversed stack elements: ");
+    for (int i = 0; i <= top; i++) {
+        printf("%d ", stack[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
