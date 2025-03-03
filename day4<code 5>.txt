@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include <stdlib.h> // Standard library for malloc and free
+
+// Node structure for queue
+struct node {
+    int data;
+    struct node *next;
+};
+
+// Queue structure with front and rear pointers
+struct queue {
+    struct node *front;
+    struct node *rear;
+};
+
+// Function prototypes
+void create_queue(struct queue *q);
+struct queue *insert(struct queue *q, int val);
+struct queue *delete_element(struct queue *q);
+void display(struct queue *q);
+int peek(struct queue *q);
+
+int main() {
+    struct queue q;
+    int val, option;
+    
+    create_queue(&q); // Initialize the queue
+    
+    do {
+        printf("\n***** MAIN MENU *****");
+        printf("\n1. INSERT");
+        printf("\n2. DELETE");
+        printf("\n3. PEEK");
+        printf("\n4. DISPLAY");
+        printf("\n5. EXIT");
+        printf("\nEnter your option: ");
+        scanf("%d", &option);
+        
+        switch(option) {
+            case 1:
+                printf("\nEnter the number to insert in the queue: ");
+                scanf("%d", &val);
+                insert(&q, val);
+                break;
+            case 2:
+                delete_element(&q);
+                break;
+            case 3:
+                val = peek(&q);
+                if(val != -1)
+                    printf("\nThe value at front of queue is: %d", val);
+                break;
+            case 4:
+                display(&q);
+                break;
+        }
+    } while(option != 5);
+    
+    return 0;
+}
+
+// Function to initialize queue
+void create_queue(struct queue *q) {
+    q->front = NULL;
+    q->rear = NULL;
+}
+
+// Function to insert an element into the queue
+struct queue *insert(struct queue *q, int val) {
+    struct node *ptr = (struct node*)malloc(sizeof(struct node));
+    ptr->data = val;
+    ptr->next = NULL;
+    
+    if(q->rear == NULL) { // If queue is empty
+        q->front = q->rear = ptr;
+    } else {
+        q->rear->next = ptr;
+        q->rear = ptr;
+    }
+    
+    return q;
+}
+
+// Function to delete an element from the queue
+struct queue *delete_element(struct queue *q) {
+    if(q->front == NULL) {
+        printf("\nQUEUE IS EMPTY");
+        return q;
+    }
+    
+    struct node *temp = q->front;
+    q->front = q->front->next;
+    
+    if(q->front == NULL) {
+        q->rear = NULL; // If queue becomes empty
+    }
+    
+    free(temp);
+    return q;
+}
+
+// Function to display the queue
+void display(struct queue *q) {
+    struct node *ptr = q->front;
+    
+    if(ptr == NULL) {
+        printf("\nQUEUE IS EMPTY");
+    } else {
+        printf("\nQueue elements: ");
+        while(ptr != NULL) {
+            printf("%d ", ptr->data);
+            ptr = ptr->next;
+        }
+        printf("\n");
+    }
+}
+
+// Function to return the front element of the queue
+int peek(struct queue *q) {
+    if(q->front == NULL) {
+        printf("\nQUEUE IS EMPTY");
+        return -1;
+    }
+    return q->front->data;
+}
