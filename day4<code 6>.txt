@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h> // For standard input-output functions
+
+#define MAX 10
+
+int queue[MAX]; // Circular queue array
+int front = -1, rear = -1; // Front and rear pointers
+
+// Function prototypes
+void insert(void);
+int delete_element(void);
+int peek(void);
+void display(void);
+
+int main() {
+    int option, val;
+    
+    do {
+        printf("\n***** MAIN MENU *****");
+        printf("\n1. Insert an element");
+        printf("\n2. Delete an element");
+        printf("\n3. Peek");
+        printf("\n4. Display the queue");
+        printf("\n5. EXIT");
+        printf("\nEnter your option: ");
+        scanf("%d", &option);
+        
+        switch(option) {
+            case 1:
+                insert();
+                break;
+            case 2:
+                val = delete_element();
+                if(val != -1)
+                    printf("\nThe number deleted is: %d", val);
+                break;
+            case 3:
+                val = peek();
+                if(val != -1)
+                    printf("\nThe first value in queue is: %d", val);
+                break;
+            case 4:
+                display();
+                break;
+        }
+    } while(option != 5);
+    
+    return 0;
+}
+
+// Function to insert an element into the circular queue
+void insert() {
+    int num;
+    printf("\nEnter the number to be inserted in the queue: ");
+    scanf("%d", &num);
+    
+    if((front == 0 && rear == MAX - 1) || (rear + 1) % MAX == front) {
+        printf("\nQUEUE OVERFLOW");
+        return;
+    }
+    
+    if(front == -1) { // If queue is initially empty
+        front = rear = 0;
+    } else {
+        rear = (rear + 1) % MAX;
+    }
+    
+    queue[rear] = num;
+}
+
+// Function to delete an element from the circular queue
+int delete_element() {
+    if(front == -1) {
+        printf("\nQUEUE UNDERFLOW");
+        return -1;
+    }
+    
+    int val = queue[front];
+    
+    if(front == rear) { // Queue has only one element
+        front = rear = -1;
+    } else {
+        front = (front + 1) % MAX;
+    }
+    
+    return val;
+}
+
+// Function to return the front element of the queue
+int peek() {
+    if(front == -1) {
+        printf("\nQUEUE IS EMPTY");
+        return -1;
+    }
+    return queue[front];
+}
+
+// Function to display the queue elements
+void display() {
+    if(front == -1) {
+        printf("\nQUEUE IS EMPTY");
+        return;
+    }
+    
+    printf("\nQueue elements: ");
+    
+    int i = front;
+    while(1) {
+        printf("%d ", queue[i]);
+        if(i == rear) break;
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
